@@ -274,6 +274,21 @@ public class MinimapIcons : BaseSettingsPlugin<MapIconsSettings>
                 !icon.Entity.Path.Contains("Metadata/Terrain/Leagues/Delve/Objects/DelveWall"))
                 continue;
 
+            int v1 = 0;
+            int v2 = 0;
+            icon.Entity.Stats?.TryGetValue(GameStat.BaseCannotBeDamaged, out v1);
+            icon.Entity.Stats?.TryGetValue(GameStat.IsHiddenMonster, out v2);
+            if (icon.Entity.Type == EntityType.Monster &&
+                (icon.Entity.Stats?.ContainsKey(GameStat.CannotBeTaggedBySentinel) ?? v1 > 0 && v2 == 0
+                ))
+                continue;
+            if (Settings.HideNonAltarMonsters && icon.Entity.Type == EntityType.Monster &&
+                icon.Entity.Rarity != MonsterRarity.Unique &&
+                !icon.Entity.Metadata.Contains("Metadata/Monsters/AtlasInvaders"))
+            {
+                continue;
+            }
+            
             var iconGridPos = icon.GridPosition();
             var position = _mapCenter +
                            DeltaInWorldToMinimapDelta(iconGridPos - playerPos,

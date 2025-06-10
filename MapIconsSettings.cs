@@ -8,6 +8,7 @@ namespace MinimapIcons;
 public class MapIconsSettings : ISettings
 {
     public ToggleNode DrawMonsters { get; set; } = new ToggleNode(true);
+    public ToggleNode HideNonAltarMonsters { get; set; } = new ToggleNode(true);
     public RangeNode<float> ZForText { get; set; } = new RangeNode<float>(-10, -50, 50);
     public ToggleNode DrawOnlyOnLargeMap { get; set; } = new ToggleNode(true);
     public ToggleNode DrawCachedEntities { get; set; } = new ToggleNode(true);

@@ -89,13 +89,8 @@ internal class DeliriumIcon : BaseIcon
         {
             string modName = null;
 
-            if (entity.HasComponent<ObjectMagicProperties>())
+            if (entity.TryGetComponent<ObjectMagicProperties>(out var objectMagicProperties) && objectMagicProperties.Mods is { } mods)
             {
-                var objectMagicProperties = entity.GetComponent<ObjectMagicProperties>();
-
-                var mods = objectMagicProperties.Mods;
-
-                if (mods != null)
                 {
                     if (mods.Contains("MonsterConvertsOnDeath_")) Show = () => entity.IsAlive && entity.IsHostile;
 

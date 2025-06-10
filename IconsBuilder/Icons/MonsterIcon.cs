@@ -58,13 +58,8 @@ public class MonsterIcon : BaseIcon
         {
             string modName = null;
 
-            if (entity.HasComponent<ObjectMagicProperties>())
+            if (entity.TryGetComponent<ObjectMagicProperties>(out var objectMagicProperties) && objectMagicProperties.Mods is { } mods)
             {
-                var objectMagicProperties = entity.GetComponent<ObjectMagicProperties>();
-
-                var mods = objectMagicProperties.Mods;
-
-                if (mods != null)
                 {
                     if (mods.Contains("MonsterConvertsOnDeath_")) Show = () => entity.IsAlive && entity.IsHostile;
 
@@ -101,7 +96,12 @@ public class MonsterIcon : BaseIcon
                         MainTexture.UV = SpriteHelper.GetUV(MapIconsIndex.LootFilterLargeWhiteHexagon);
                         MainTexture.Color = Color.DarkOrange;
                         if (settings.MonsterRarityNames.ShowUniqueNames)
-                            Text = RenderName.Split(',').FirstOrDefault();
+                        {
+                            var metadataPart = entity.Metadata.Split('/').LastOrDefault() ?? string.Empty;
+                            metadataPart = metadataPart.Contains("Standalone") ? string.Empty : metadataPart;
+                            Text = metadataPart;
+                            //Text = RenderName.Split(',').FirstOrDefault();
+                        }
                         break;
                     default:
                         throw new ArgumentOutOfRangeException(
